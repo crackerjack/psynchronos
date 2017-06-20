@@ -3,19 +3,19 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Psynchronos</title>
+  <title>The Time Warp</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="A blog about shifting, stopping and saving time.">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Psynchronos">
+<meta property="og:title" content="The Time Warp">
 <meta property="og:url" content="https://github.com/crackerjack/psynchronos/index.html">
-<meta property="og:site_name" content="Psynchronos">
+<meta property="og:site_name" content="The Time Warp">
 <meta property="og:description" content="A blog about shifting, stopping and saving time.">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Psynchronos">
+<meta name="twitter:title" content="The Time Warp">
 <meta name="twitter:description" content="A blog about shifting, stopping and saving time.">
   
-    <link rel="alternate" href="/atom.xml" title="Psynchronos" type="application/atom+xml">
+    <link rel="alternate" href="/atom.xml" title="The Time Warp" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
@@ -36,11 +36,11 @@
   <div id="header-outer" class="outer">
     <div id="header-title" class="inner">
       <h1 id="logo-wrap">
-        <a href="/psynchronos/" id="logo">Psynchronos</a>
+        <a href="/psynchronos/" id="logo">The Time Warp</a>
       </h1>
       
         <h2 id="subtitle-wrap">
-          <a href="/psynchronos/" id="subtitle">About time...</a>
+          <a href="/psynchronos/" id="subtitle">Let&#39;s do it again...</a>
         </h2>
       
     </div>
@@ -90,22 +90,22 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>The first thing you want to do when experimenting with shifting time, is to eliminate as many variables as possible. Time is a slippery concept at the best of, well, times - so starting with a well understood base is vital if you don’t want to lose your marbles. The first thing you want to do is set the time zone on your platform to the timezone you are living in. This blog posts explains how to go about setting up the timezone on a cloud instance - in this case an Amazon EC2 (<a href="https://lightsail.aws.amazon.com" target="_blank" rel="external">Lightsail</a>) VPS. </p>
+        <p>The first thing you want to do when experimenting with shifting time, is to eliminate as many variables as possible. Time is a slippery concept at the best of, well, times - so starting with a well understood base is vital if you don’t want to lose your marbles. The first thing you may want to do, is set the time zone on your platform to the timezone you are living in. This blog posts explains how to go about setting up the timezone on a cloud instance - in this case an Amazon EC2 (<a href="https://lightsail.aws.amazon.com" target="_blank" rel="external">Lightsail</a>) VPS. </p>
 <p>By the way, I’ll try avoid awful puns in these blog posts, but the concept of Time is so prevalent in our thinking, that it pervades our idioms and phrases and it is sometimes (there you go), just unavoidable.</p>
-<h2 id="Linux-Timezones"><a href="#Linux-Timezones" class="headerlink" title="Linux Timezones"></a>Linux Timezones</h2><p>The first thing to do is to determine the time zone you want to use onthe instance.</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ls /usr/share/zoneinfo</div></pre></td></tr></table></figure>
-<p>This will list the directory structure of the available time zones in a hierarchy. For example, within the <code>Australia</code> directory, there will be a list of time zones by city and region within Australia.  Even though the instance I am running is physically in the Pacific Daylight Time Zone (UTC -7), and by default is set to UTC, I find it easier to relate to when I see all times in my own local time zone, which is Melbourne, Australia (UTC +10). Of course there is Daylight Savings too, but that is fodder for another post, perhaps another time.</p>
+<h2 id="Linux-Timezones"><a href="#Linux-Timezones" class="headerlink" title="Linux Timezones"></a>Linux Timezones</h2><p>The first thing to do is to determine the time zone you want to use on the instance.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ ls /usr/share/zoneinfo</div></pre></td></tr></table></figure>
+<p>This will list the directory structure of the available time zones in an hierarchy. For example, within the <code>Australia</code> directory, there will be a list of time zones by city and region within Australia.  Even though the instance I am running is physically in the Pacific Daylight Time Zone (UTC -7), and by default the time zone is set to UTC, I find it easier to relate to when I see all times in my own local time zone, which is Melbourne, Australia (UTC +10) at present. Of course there is Daylight Savings too, but that is fodder for another post, perhaps another time.</p>
 <p>Now that you know the time zone you are interested in, you can set this in your instance. Open the <code>/etc/sysconfig/clock</code> file:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo vim /etc/sysconfig/clock</div></pre></td></tr></table></figure>
-<p>…or…<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo nano /etc/sysconfig/clock</div></pre></td></tr></table></figure></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo vim /etc/sysconfig/clock</div></pre></td></tr></table></figure>
+<p>…or…<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo nano /etc/sysconfig/clock</div></pre></td></tr></table></figure></p>
 <p>Update the <code>ZONE</code> entry. In my case I set this as follows:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ZONE=<span class="string">"Australia/Melbourne"</span></div></pre></td></tr></table></figure>
-<p>Don’t change any othe settings in this root-owned file. Save the changes you have made and then create a symbolic link between <code>/etc/localtime</code> and the time zone file. Again you need <code>sudo</code> to do this.</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo ln -sf /usr/share/zoneinfo/Australia/Melbourne /etc/localtime</div></pre></td></tr></table></figure>
+<p>Save the changes you have made and then create a symbolic link between <code>/etc/localtime</code> and the time zone file. Again you need <code>sudo</code> to do this. Don’t change any other settings in this root-owned file.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo ln -sf /usr/share/zoneinfo/Australia/Melbourne /etc/localtime</div></pre></td></tr></table></figure>
 <p>You may need to reboot your system to pickup the changes.</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo reboot</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo reboot</div></pre></td></tr></table></figure>
 <p>You can now check that the time is the same as where you are. In my case, at the time of writing I saw this:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">date</div><div class="line">Mon Jun 19 22:00:28 AEST 2017</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ date</div><div class="line">Mon Jun 19 22:00:28 AEST 2017</div></pre></td></tr></table></figure>
 <p>That’s it for today - until next time!</p>
 
       
@@ -123,99 +123,6 @@
 
 
   
-    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/psynchronos/2017/06/19/hello-world/" class="article-date">
-  <time datetime="2017-06-19T05:49:28.851Z" itemprop="datePublished">2017-06-19</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/psynchronos/2017/06/19/hello-world/">Hello World</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://github.com/crackerjack/psynchronos/2017/06/19/hello-world/" data-id="cj443fvml00010op5350i9l8e" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-first-post" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/psynchronos/2017/06/19/first-post/" class="article-date">
-  <time datetime="2017-06-18T14:00:00.000Z" itemprop="datePublished">2017-06-19</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/psynchronos/categories/Time-Machine/">Time Machine</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/psynchronos/2017/06/19/first-post/">Introducing Time Machine</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="The-Time-Traveller"><a href="#The-Time-Traveller" class="headerlink" title="The Time Traveller"></a>The Time Traveller</h2><p>This is the first test post on Hexo about the ability to travel in time. It will introduce:</p>
-<ul>
-<li>The Traveller (me)</li>
-<li>The Transporter (the Time Machine)</li>
-<li>Some important concepts</li>
-</ul>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://github.com/crackerjack/psynchronos/2017/06/19/first-post/" data-id="cj443fvmf00000op5eek134p4" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/psynchronos/tags/Time/">Time</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
 
 </section>
         
@@ -225,7 +132,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Categories</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/psynchronos/categories/Time-Machine/">Time Machine</a></li></ul>
+      <ul class="category-list"></ul>
     </div>
   </div>
 
@@ -235,7 +142,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/psynchronos/tags/Time/">Time</a></li><li class="tag-list-item"><a class="tag-list-link" href="/psynchronos/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/psynchronos/tags/setup/">setup</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/psynchronos/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/psynchronos/tags/setup/">setup</a></li></ul>
     </div>
   </div>
 
@@ -245,7 +152,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/psynchronos/tags/Time/" style="font-size: 10px;">Time</a> <a href="/psynchronos/tags/linux/" style="font-size: 10px;">linux</a> <a href="/psynchronos/tags/setup/" style="font-size: 10px;">setup</a>
+      <a href="/psynchronos/tags/linux/" style="font-size: 10px;">linux</a> <a href="/psynchronos/tags/setup/" style="font-size: 10px;">setup</a>
     </div>
   </div>
 
@@ -268,14 +175,6 @@
         
           <li>
             <a href="/psynchronos/2017/06/19/timezones/">Time Zones</a>
-          </li>
-        
-          <li>
-            <a href="/psynchronos/2017/06/19/hello-world/">Hello World</a>
-          </li>
-        
-          <li>
-            <a href="/psynchronos/2017/06/19/first-post/">Introducing Time Machine</a>
           </li>
         
       </ul>

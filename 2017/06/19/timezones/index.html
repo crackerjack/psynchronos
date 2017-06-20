@@ -3,21 +3,21 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Time Zones | Psynchronos</title>
+  <title>Time Zones | The Time Warp</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="The first thing you want to do when experimenting with shifting time, is to eliminate as many variables as possible. Time is a slippery concept at the best of, well, times - so starting with a well un">
 <meta name="keywords" content="linux,setup">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Time Zones">
 <meta property="og:url" content="https://github.com/crackerjack/psynchronos/2017/06/19/timezones/index.html">
-<meta property="og:site_name" content="Psynchronos">
+<meta property="og:site_name" content="The Time Warp">
 <meta property="og:description" content="The first thing you want to do when experimenting with shifting time, is to eliminate as many variables as possible. Time is a slippery concept at the best of, well, times - so starting with a well un">
-<meta property="og:updated_time" content="2017-06-19T12:04:38.226Z">
+<meta property="og:updated_time" content="2017-06-20T03:56:02.181Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Time Zones">
 <meta name="twitter:description" content="The first thing you want to do when experimenting with shifting time, is to eliminate as many variables as possible. Time is a slippery concept at the best of, well, times - so starting with a well un">
   
-    <link rel="alternate" href="/atom.xml" title="Psynchronos" type="application/atom+xml">
+    <link rel="alternate" href="/atom.xml" title="The Time Warp" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
@@ -38,11 +38,11 @@
   <div id="header-outer" class="outer">
     <div id="header-title" class="inner">
       <h1 id="logo-wrap">
-        <a href="/psynchronos/" id="logo">Psynchronos</a>
+        <a href="/psynchronos/" id="logo">The Time Warp</a>
       </h1>
       
         <h2 id="subtitle-wrap">
-          <a href="/psynchronos/" id="subtitle">About time...</a>
+          <a href="/psynchronos/" id="subtitle">Let&#39;s do it again...</a>
         </h2>
       
     </div>
@@ -90,22 +90,22 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>The first thing you want to do when experimenting with shifting time, is to eliminate as many variables as possible. Time is a slippery concept at the best of, well, times - so starting with a well understood base is vital if you don’t want to lose your marbles. The first thing you want to do is set the time zone on your platform to the timezone you are living in. This blog posts explains how to go about setting up the timezone on a cloud instance - in this case an Amazon EC2 (<a href="https://lightsail.aws.amazon.com" target="_blank" rel="external">Lightsail</a>) VPS. </p>
+        <p>The first thing you want to do when experimenting with shifting time, is to eliminate as many variables as possible. Time is a slippery concept at the best of, well, times - so starting with a well understood base is vital if you don’t want to lose your marbles. The first thing you may want to do, is set the time zone on your platform to the timezone you are living in. This blog posts explains how to go about setting up the timezone on a cloud instance - in this case an Amazon EC2 (<a href="https://lightsail.aws.amazon.com" target="_blank" rel="external">Lightsail</a>) VPS. </p>
 <p>By the way, I’ll try avoid awful puns in these blog posts, but the concept of Time is so prevalent in our thinking, that it pervades our idioms and phrases and it is sometimes (there you go), just unavoidable.</p>
-<h2 id="Linux-Timezones"><a href="#Linux-Timezones" class="headerlink" title="Linux Timezones"></a>Linux Timezones</h2><p>The first thing to do is to determine the time zone you want to use onthe instance.</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ls /usr/share/zoneinfo</div></pre></td></tr></table></figure>
-<p>This will list the directory structure of the available time zones in a hierarchy. For example, within the <code>Australia</code> directory, there will be a list of time zones by city and region within Australia.  Even though the instance I am running is physically in the Pacific Daylight Time Zone (UTC -7), and by default is set to UTC, I find it easier to relate to when I see all times in my own local time zone, which is Melbourne, Australia (UTC +10). Of course there is Daylight Savings too, but that is fodder for another post, perhaps another time.</p>
+<h2 id="Linux-Timezones"><a href="#Linux-Timezones" class="headerlink" title="Linux Timezones"></a>Linux Timezones</h2><p>The first thing to do is to determine the time zone you want to use on the instance.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ ls /usr/share/zoneinfo</div></pre></td></tr></table></figure>
+<p>This will list the directory structure of the available time zones in an hierarchy. For example, within the <code>Australia</code> directory, there will be a list of time zones by city and region within Australia.  Even though the instance I am running is physically in the Pacific Daylight Time Zone (UTC -7), and by default the time zone is set to UTC, I find it easier to relate to when I see all times in my own local time zone, which is Melbourne, Australia (UTC +10) at present. Of course there is Daylight Savings too, but that is fodder for another post, perhaps another time.</p>
 <p>Now that you know the time zone you are interested in, you can set this in your instance. Open the <code>/etc/sysconfig/clock</code> file:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo vim /etc/sysconfig/clock</div></pre></td></tr></table></figure>
-<p>…or…<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo nano /etc/sysconfig/clock</div></pre></td></tr></table></figure></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo vim /etc/sysconfig/clock</div></pre></td></tr></table></figure>
+<p>…or…<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo nano /etc/sysconfig/clock</div></pre></td></tr></table></figure></p>
 <p>Update the <code>ZONE</code> entry. In my case I set this as follows:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ZONE=<span class="string">"Australia/Melbourne"</span></div></pre></td></tr></table></figure>
-<p>Don’t change any othe settings in this root-owned file. Save the changes you have made and then create a symbolic link between <code>/etc/localtime</code> and the time zone file. Again you need <code>sudo</code> to do this.</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo ln -sf /usr/share/zoneinfo/Australia/Melbourne /etc/localtime</div></pre></td></tr></table></figure>
+<p>Save the changes you have made and then create a symbolic link between <code>/etc/localtime</code> and the time zone file. Again you need <code>sudo</code> to do this. Don’t change any other settings in this root-owned file.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo ln -sf /usr/share/zoneinfo/Australia/Melbourne /etc/localtime</div></pre></td></tr></table></figure>
 <p>You may need to reboot your system to pickup the changes.</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo reboot</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo reboot</div></pre></td></tr></table></figure>
 <p>You can now check that the time is the same as where you are. In my case, at the time of writing I saw this:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">date</div><div class="line">Mon Jun 19 22:00:28 AEST 2017</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ date</div><div class="line">Mon Jun 19 22:00:28 AEST 2017</div></pre></td></tr></table></figure>
 <p>That’s it for today - until next time!</p>
 
       
@@ -120,16 +120,6 @@
   </div>
   
     
-<nav id="article-nav">
-  
-  
-    <a href="/psynchronos/2017/06/19/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">Hello World</div>
-    </a>
-  
-</nav>
-
   
 </article>
 
@@ -141,7 +131,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Categories</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/psynchronos/categories/Time-Machine/">Time Machine</a></li></ul>
+      <ul class="category-list"></ul>
     </div>
   </div>
 
@@ -151,7 +141,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/psynchronos/tags/Time/">Time</a></li><li class="tag-list-item"><a class="tag-list-link" href="/psynchronos/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/psynchronos/tags/setup/">setup</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/psynchronos/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/psynchronos/tags/setup/">setup</a></li></ul>
     </div>
   </div>
 
@@ -161,7 +151,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/psynchronos/tags/Time/" style="font-size: 10px;">Time</a> <a href="/psynchronos/tags/linux/" style="font-size: 10px;">linux</a> <a href="/psynchronos/tags/setup/" style="font-size: 10px;">setup</a>
+      <a href="/psynchronos/tags/linux/" style="font-size: 10px;">linux</a> <a href="/psynchronos/tags/setup/" style="font-size: 10px;">setup</a>
     </div>
   </div>
 
@@ -184,14 +174,6 @@
         
           <li>
             <a href="/psynchronos/2017/06/19/timezones/">Time Zones</a>
-          </li>
-        
-          <li>
-            <a href="/psynchronos/2017/06/19/hello-world/">Hello World</a>
-          </li>
-        
-          <li>
-            <a href="/psynchronos/2017/06/19/first-post/">Introducing Time Machine</a>
           </li>
         
       </ul>
